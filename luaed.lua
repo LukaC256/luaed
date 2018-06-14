@@ -41,6 +41,13 @@ function append_multiple(caption)
 	end
 end
 
+function edit(ln)
+	if ln > #text or ln < 1 then return end
+	print(ln.." : "..text[ln])
+	io.write("=> ")
+	text[ln] = io.read()
+end
+
 function remove_line(ln)
 	if ln < 1 or ln > #text then return end
 	table.remove(text, ln)
@@ -142,6 +149,12 @@ while true do
 		else
 			append_multiple(param)
 		end
+	elseif command == "led" then
+		if tonumber(param) then
+			edit(tonumber(param))
+		else
+			print("SYNTAX ERROR! Missing line number")
+		end
 	elseif command == "list" then
 		list()
 	elseif command == "cln" then
@@ -164,3 +177,4 @@ while true do
 		print("SYNTAX ERROR! Unrecognised Command "..command.."!")
 	end
 end
+
