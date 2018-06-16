@@ -59,6 +59,11 @@ function list()
 	end
 end
 
+function print_line(ln)
+	if ln < 1 or ln > #text then return end
+	print(ln.." : "..text[ln])
+end
+
 function print_status()
 	print("Lines: "..#text)
 	local bytes = 0
@@ -157,6 +162,12 @@ while true do
 		end
 	elseif command == "list" then
 		list()
+	elseif command == "cat" then
+		if tonumber(param) then
+			print_line(tonumber(param))
+		else
+			print("SYNTAX ERROR! Missing line number")
+		end
 	elseif command == "cln" then
 		text = {}
 		std_filename = ""
