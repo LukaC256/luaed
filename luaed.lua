@@ -13,9 +13,7 @@ function print_help()
 	print("app  : Append Line")
 	print("mapp : Append multiple Lines")
 	print("led  : Edit Line")
-	print("mled : Edit Multiple Lines")
 	print("ins  : Insert line")
-	print("mins : Insert multiple lines")
 	print("rln  : Remove line")
 	print("cln  : Remove all Lines")
 	print("stat : Print information")
@@ -46,6 +44,12 @@ function edit(ln)
 	print(ln.." : "..text[ln])
 	io.write("=> ")
 	text[ln] = io.read()
+end
+
+function insert(ln)
+	if ln < 1 or ln > #text then return end
+	io.write(">> ")
+	table.insert(text, ln, io.read())
 end
 
 function remove_line(ln)
@@ -159,6 +163,12 @@ while true do
 			edit(tonumber(param))
 		else
 			print("SYNTAX ERROR! Missing line number")
+		end
+	elseif command == "ins" then
+		if tonumber(param) then
+			insert(tonumber(param))
+		else
+			print("SYNTAX ERROR! Missing line number!")
 		end
 	elseif command == "list" then
 		list()
