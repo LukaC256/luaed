@@ -110,10 +110,14 @@ function confirm_clean()
 	end
 end
 
-function load_file()
+function load_file_prompt()
 	if not confirm_clean() then return end
 	io.write("Please enter Filename: ")
 	local filename = io.read()
+	load_file(filename)
+end
+
+function load_file(filename)
 	local file, error = io.open(filename, "r")
 	if not file then
 		print("File IO Error: "..error)
@@ -126,6 +130,10 @@ function load_file()
 	std_filename = filename
 	print("Load successful!")
 	print_status()
+end
+
+if arg[1] then
+	load_file(arg[1])
 end
 
 while true do
@@ -186,7 +194,7 @@ while true do
 	elseif command == "save" then
 		save_file()
 	elseif command == "load" then
-		load_file()
+		load_file_prompt()
 	elseif command == "rln" then
 		local ln = tonumber(param)
 		if ln then
