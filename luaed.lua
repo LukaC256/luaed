@@ -4,6 +4,7 @@ print("==================================")
 
 text = {}
 std_filename = ""
+modified = false
 
 function print_help()
 	print("load : Load File")
@@ -24,6 +25,7 @@ end
 function append()
 	io.write("*> ")
 	local line = io.read()
+	modified = true
 	table.insert(text, line)
 end
 
@@ -37,6 +39,7 @@ function append_multiple(caption)
 		end
 		table.insert(text, line)
 	end
+	modified = true
 end
 
 function edit(ln)
@@ -44,17 +47,20 @@ function edit(ln)
 	print(ln.." : "..text[ln])
 	io.write("=> ")
 	text[ln] = io.read()
+	modified = true
 end
 
 function insert(ln)
 	if ln < 1 or ln > #text then return end
 	io.write(">> ")
 	table.insert(text, ln, io.read())
+	modified = true
 end
 
 function remove_line(ln)
 	if ln < 1 or ln > #text then return end
 	table.remove(text, ln)
+	modified = true
 end
 
 function list()
@@ -76,6 +82,9 @@ function print_status()
 	end
 	print("Bytes: "..bytes)
 	print("Filename: "..std_filename)
+	if modified then
+		print("The File has been modified!")
+	end
 end
 
 function save_file()
@@ -94,6 +103,7 @@ function save_file()
 	end
 	file:close()
 	std_filename = filename
+	modified = false
 	print_status()
 	print("Save succeeded!")
 end
@@ -128,6 +138,7 @@ function load_file(filename)
 	end
 	file:close()
 	std_filename = filename
+	modified = false
 	print("Load successful!")
 	print_status()
 end
@@ -152,8 +163,15 @@ while true do
 		end
 	end
 	if command == "exit" then
-		io.write("Do you really want to exit? [Y,n] ")
-		if string.lower(io.read()) == "y" then
+		if modified then
+			io.write("The File has been modified. Do you want to save? [Y,n] ")
+			if string.lower(io.read()) == "y" then
+				save_file()
+				break
+			else
+				break
+			end
+		else
 			break
 		end
 	elseif command == "help" then
@@ -189,6 +207,7 @@ while true do
 	elseif command == "cln" then
 		text = {}
 		std_filename = ""
+		modified = false
 	elseif command == "stat" then
 		print_status()
 	elseif command == "save" then
